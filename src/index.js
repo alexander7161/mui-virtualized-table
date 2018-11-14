@@ -128,10 +128,6 @@ export const styles = theme => ({
 });
 
 class MuiTable extends Component {
-  static propTypes = {
-    width: PropTypes.number.isRequired
-  };
-
   static defaultProps = {
     rowHeight: 48,
     maxHeight: null,
@@ -253,33 +249,31 @@ class MuiTable extends Component {
               ? column.header
               : column.name
             : column.cell
-              ? column.cell(rowData)
-              : rowData[column.name]}
+            ? column.cell(rowData)
+            : rowData[column.name]}
         </span>
         <span style={{ float: 'right' }}>
-          {isHeader &&
-            resizable &&
-            columnIndex < columns.length - 1 && (
-              <Draggable
-                axis="x"
-                //defaultPosition={{ x: 0 }}
-                // bounds={{ left: 10, right: 10 }}
-                //bounds={'.' + classes.cellContents}
-                //bounds="#root"
-                defaultClassName={classes.dragHandle}
-                defaultClassNameDragging={classes.DragHandleActive}
-                onDrag={(event, { deltaX }) =>
-                  this.resizeRow({
-                    dataKey: column.name,
-                    deltaX
-                  })
-                }
-                position={{ x: 0 }}
-                zIndex={999}
-              >
-                <span className={classes.DragHandleIcon}>⋮</span>
-              </Draggable>
-            )}
+          {isHeader && resizable && columnIndex < columns.length - 1 && (
+            <Draggable
+              axis="x"
+              //defaultPosition={{ x: 0 }}
+              // bounds={{ left: 10, right: 10 }}
+              //bounds={'.' + classes.cellContents}
+              //bounds="#root"
+              defaultClassName={classes.dragHandle}
+              defaultClassNameDragging={classes.DragHandleActive}
+              onDrag={(event, { deltaX }) =>
+                this.resizeRow({
+                  dataKey: column.name,
+                  deltaX
+                })
+              }
+              position={{ x: 0 }}
+              zIndex={999}
+            >
+              <span className={classes.DragHandleIcon}>⋮</span>
+            </Draggable>
+          )}
         </span>
       </div>
     );
@@ -466,7 +460,7 @@ class MuiTable extends Component {
 MuiTable.propTypes = {
   data: PropTypes.array,
   columns: PropTypes.array,
-  width: PropTypes.number,
+  width: PropTypes.number.isRequired,
   height: PropTypes.number,
   maxHeight: PropTypes.number,
   pagination: PropTypes.object,
@@ -474,10 +468,7 @@ MuiTable.propTypes = {
   fixedRowCount: PropTypes.number,
   fixedColumnCount: PropTypes.number,
   rowHeight: PropTypes.number,
-  columnWidth: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.func,
-  ]),
+  columnWidth: PropTypes.oneOfType([PropTypes.number, PropTypes.func]),
   includeHeaders: PropTypes.bool,
   orderBy: PropTypes.string,
   orderDirection: PropTypes.string,
