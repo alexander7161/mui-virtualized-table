@@ -40,6 +40,11 @@ export const styles = theme => ({
       color: theme.palette.text.secondary,
       fontSize: theme.typography.pxToRem(12),
 
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      padding: 0,
+
       // Hide scrollbars on Chrome/Safari/IE
       '&::-webkit-scrollbar': {
         display: 'none'
@@ -82,12 +87,17 @@ export const styles = theme => ({
     width: '100%',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
-    textOverflow: 'ellipsis'
+    textOverflow: 'ellipsis',
+    flex: 'auto'
   },
   cellHeader: {
     fontSize: theme.typography.pxToRem(12),
     fontWeight: theme.typography.fontWeightMedium,
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
+    flex: 'auto',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center'
   },
   cellInLastColumn: {
     paddingRight: theme.spacing.unit * 3
@@ -155,10 +165,19 @@ class MuiTable extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  // componentWillReceiveProps(nextProps) {
+  //   if (
+  //     nextProps.width !== this.props.width ||
+  //     nextProps.columns !== this.props.columns
+  //   ) {
+  //     this.multiGrid.recomputeGridSize();
+  //   }
+  // }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
     if (
-      nextProps.width !== this.props.width ||
-      nextProps.columns !== this.props.columns
+      prevProps.width !== this.props.width ||
+      prevProps.columns !== this.props.columns
     ) {
       this.multiGrid.recomputeGridSize();
     }
@@ -243,6 +262,10 @@ class MuiTable extends Component {
             columnIndex < columns.length - 1 && (
               <Draggable
                 axis="x"
+                //defaultPosition={{ x: 0 }}
+                // bounds={{ left: 10, right: 10 }}
+                //bounds={'.' + classes.cellContents}
+                //bounds="#root"
                 defaultClassName={classes.dragHandle}
                 defaultClassNameDragging={classes.DragHandleActive}
                 onDrag={(event, { deltaX }) =>
@@ -451,7 +474,10 @@ MuiTable.propTypes = {
   fixedRowCount: PropTypes.number,
   fixedColumnCount: PropTypes.number,
   rowHeight: PropTypes.number,
-  columnWidth: PropTypes.number,
+  columnWidth: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.func,
+  ]),
   includeHeaders: PropTypes.bool,
   orderBy: PropTypes.string,
   orderDirection: PropTypes.string,
